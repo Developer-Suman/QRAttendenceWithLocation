@@ -1,0 +1,28 @@
+[
+  {
+    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "Method": "Get",
+    "RelativePath": "api/Purchase",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "Method": "AddPurchase",
+    "RelativePath": "api/Purchase/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchase",
+        "Type": "QRWithSignalR.ServiceDTOs.PurchaseDTOs",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

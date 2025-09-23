@@ -1,0 +1,50 @@
+[
+  {
+    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "Method": "AddPurchase",
+    "RelativePath": "api/Purchase/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchase",
+        "Type": "QRWithSignalR.ServiceDTOs.PurchaseDTOs",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "Method": "MarkAttendance",
+    "RelativePath": "api/Purchase/MarkAttendance",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "QRWithSignalR.ServiceDTOs.AttandanceDTOs",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "Method": "AddData",
+    "RelativePath": "api/Purchase/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "abc",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
