@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "ContainingType": "QRWithSignalR.Controllers.v1.PurchaseController",
     "Method": "AddPurchase",
-    "RelativePath": "api/Purchase/add",
+    "RelativePath": "api/v{version}/Purchase/add",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -11,14 +11,91 @@
         "Name": "purchase",
         "Type": "QRWithSignalR.ServiceDTOs.PurchaseDTOs",
         "IsRequired": true
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "ContainingType": "QRWithSignalR.Controllers.v2.PurchaseController",
+    "Method": "AddPurchase",
+    "RelativePath": "api/v{version}/Purchase/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchase",
+        "Type": "QRWithSignalR.ServiceDTOs.PurchaseDTOs",
+        "IsRequired": true
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.v3.PurchaseController",
+    "Method": "AddPurchase",
+    "RelativePath": "api/v{version}/Purchase/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchase",
+        "Type": "QRWithSignalR.ServiceDTOs.PurchaseDTOs",
+        "IsRequired": true
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.v1.PurchaseController",
     "Method": "MarkAttendance",
-    "RelativePath": "api/Purchase/MarkAttendance",
+    "RelativePath": "api/v{version}/Purchase/MarkAttendance",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -27,20 +104,174 @@
         "Name": "request",
         "Type": "QRWithSignalR.ServiceDTOs.AttandanceDTOs",
         "IsRequired": true
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "QRWithSignalR.Controllers.PurchaseController",
+    "ContainingType": "QRWithSignalR.Controllers.v2.PurchaseController",
+    "Method": "MarkAttendance",
+    "RelativePath": "api/v{version}/Purchase/MarkAttendance",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "QRWithSignalR.ServiceDTOs.AttandanceDTOs",
+        "IsRequired": true
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.v3.PurchaseController",
+    "Method": "MarkAttendance",
+    "RelativePath": "api/v{version}/Purchase/MarkAttendance",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "QRWithSignalR.ServiceDTOs.AttandanceDTOs",
+        "IsRequired": true
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.v1.PurchaseController",
     "Method": "AddData",
-    "RelativePath": "api/Purchase/test",
+    "RelativePath": "api/v{version}/Purchase/test",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "abc",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.v2.PurchaseController",
+    "Method": "AddData",
+    "RelativePath": "api/v{version}/Purchase/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "abc",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "X-Version",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "QRWithSignalR.Controllers.v3.PurchaseController",
+    "Method": "AddData",
+    "RelativePath": "api/v{version}/Purchase/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "abc",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "version",
+        "Type": "",
+        "IsRequired": true
+      },
+      {
+        "Name": "api-version",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "X-Version",
         "Type": "System.String",
         "IsRequired": false
       }

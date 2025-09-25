@@ -1,28 +1,52 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "NETRAVERSE API",
-    "version": "V1"
+    "title": "QRWithSignalR",
+    "version": "1.0"
   },
   "paths": {
-    "/api/Purchase/add": {
+    "/api/v{version}/Purchase/add": {
       "post": {
         "tags": [
           "Purchase"
         ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; ver=1.0": {
               "schema": {
                 "$ref": "#/components/schemas/PurchaseDTOs"
               }
             },
-            "text/json": {
+            "text/json; ver=1.0": {
               "schema": {
                 "$ref": "#/components/schemas/PurchaseDTOs"
               }
             },
-            "application/*+json": {
+            "application/*+json; ver=1.0": {
               "schema": {
                 "$ref": "#/components/schemas/PurchaseDTOs"
               }
@@ -36,7 +60,7 @@
         }
       }
     },
-    "/api/Purchase/test": {
+    "/api/v{version}/Purchase/test": {
       "get": {
         "tags": [
           "Purchase"
@@ -45,6 +69,28 @@
           {
             "name": "abc",
             "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -57,24 +103,48 @@
         }
       }
     },
-    "/api/Purchase/MarkAttendance": {
+    "/api/v{version}/Purchase/MarkAttendance": {
       "post": {
         "tags": [
           "Purchase"
         ],
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Version",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "application/json; ver=1.0": {
               "schema": {
                 "$ref": "#/components/schemas/AttandanceDTOs"
               }
             },
-            "text/json": {
+            "text/json; ver=1.0": {
               "schema": {
                 "$ref": "#/components/schemas/AttandanceDTOs"
               }
             },
-            "application/*+json": {
+            "application/*+json; ver=1.0": {
               "schema": {
                 "$ref": "#/components/schemas/AttandanceDTOs"
               }
@@ -129,19 +199,6 @@
         },
         "additionalProperties": false
       }
-    },
-    "securitySchemes": {
-      "Bearer": {
-        "type": "http",
-        "description": "Please enter a valid token",
-        "scheme": "Bearer",
-        "bearerFormat": "JWT"
-      }
     }
-  },
-  "security": [
-    {
-      "Bearer": [ ]
-    }
-  ]
+  }
 }

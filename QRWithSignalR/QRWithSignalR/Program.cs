@@ -1,3 +1,6 @@
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+using Asp.Versioning.Conventions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -43,36 +46,39 @@ builder.Services.AddSignalR();
 
 
 #region ConfigureSwaggerForAuthentication
-builder.Services.AddSwaggerGen(
-option =>
-{
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "NETRAVERSE API", Version = "V1" });
-    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter a valid token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "Bearer"
-    });
-    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-        });
-}
-);
+//builder.Services.AddSwaggerGen(
+//option =>
+//{
+//    option.SwaggerDoc("v1", new OpenApiInfo { Title = "NETRAVERSE API", Version = "V1" });
+//    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+//    {
+//        In = ParameterLocation.Header,
+//        Description = "Please enter a valid token",
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.Http,
+//        BearerFormat = "JWT",
+//        Scheme = "Bearer"
+//    });
+//    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+//    {
+//                {
+//                    new OpenApiSecurityScheme
+//                    {
+//                        Reference = new OpenApiReference
+//                        {
+//                            Type=ReferenceType.SecurityScheme,
+//                            Id="Bearer"
+//                        }
+//                    },
+//                    Array.Empty<string>()
+//                }
+//        });
+//}
+//);
 #endregion
+
+
+
 
 // Configure CORS for React frontend
 
@@ -84,14 +90,42 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:5173") // your React app
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowCredentials()
+
+        //Cache preflight response for 10 minutes
+        .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
     });
 });
 
 #endregion
 
-var app = builder.Build();
 
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new QueryStringApiVersionReader("api-version"),
+        new HeaderApiVersionReader("X-Version"),
+        new MediaTypeApiVersionReader("ver"));
+}).AddApiExplorer(options=>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
+
+var app = builder.Build();
+app.UseSwaggerUI(options =>
+{
+    var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    foreach (var description in provider.ApiVersionDescriptions)
+    {
+        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+            description.GroupName.ToUpperInvariant());
+    }
+});
 
 #region RedirectSwagger
 //Redirect request from the root Url to swagger UI
