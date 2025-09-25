@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using QRWithSignalR.Interface;
@@ -6,10 +7,12 @@ using QRWithSignalR.ServiceDTOs;
 using QRWithSignalR.Services;
 using QRWithSignalR.SignalRHub;
 
-namespace QRWithSignalR.Controllers
+namespace QRWithSignalR.Controllers.v1
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
+
     public class PurchaseController : ControllerBase
     {
         private readonly IHubContext<NotificationHub> _hubContext;

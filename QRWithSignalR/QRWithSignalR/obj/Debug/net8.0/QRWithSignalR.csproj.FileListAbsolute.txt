@@ -311,3 +311,8 @@ D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\obj\Debug\net8.0\refint\Q
 D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\obj\Debug\net8.0\QRWithSignalR.pdb
 D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\obj\Debug\net8.0\QRWithSignalR.genruntimeconfig.cache
 D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\obj\Debug\net8.0\ref\QRWithSignalR.dll
+D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\bin\Debug\net8.0\Asp.Versioning.Abstractions.dll
+D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\bin\Debug\net8.0\Asp.Versioning.Http.dll
+D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\bin\Debug\net8.0\Asp.Versioning.Mvc.dll
+D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\bin\Debug\net8.0\Asp.Versioning.Mvc.ApiExplorer.dll
+D:\Workspace\LocationTrack\QRWithSignalR\QRWithSignalR\obj\Debug\net8.0\QRWithSignalR.sourcelink.json
