@@ -1,4 +1,0 @@
-wwwroot\qrcodes\new.png
-wwwroot\qrcodes\3ee38265-3e24-4704-bdcd-eef29e583ab1.png
-wwwroot\qrcodes\500bf76c-8b85-4c35-82fa-686a66dffb59.png
-wwwroot\qrcodes\54c3857f-5244-49f8-afc2-567a703b0e0f.png
