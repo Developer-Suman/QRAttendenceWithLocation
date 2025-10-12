@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using QRWithSignalR.Data;
 using QRWithSignalR.Entity;
 using QRWithSignalR.Interface;
+using QRWithSignalR.Middleware;
 using QRWithSignalR.Services;
 using QRWithSignalR.SignalRHub;
 
@@ -116,6 +117,8 @@ builder.Services.AddApiVersioning(options =>
 });
 
 
+builder.Services.AddTransient<GlobalErrorHandlingMiddleware>();
+
 var app = builder.Build();
 app.UseSwaggerUI(options =>
 {
@@ -157,6 +160,15 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors();
 app.UseHttpsRedirection();
+app.UseAuthorization();
+
+
+
+//Middleware to log request and response(Global Error Handling can be done here)
+
+app.UseMiddleware<QRWithSignalR.Middleware.GlobalErrorHandlingMiddleware>();
+
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
