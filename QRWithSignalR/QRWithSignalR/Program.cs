@@ -4,6 +4,9 @@ using Asp.Versioning.Conventions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using QRWithSignalR.BackGroundServices;
+using QRWithSignalR.BackGroundServices.Interface;
+using QRWithSignalR.BackGroundServices.Services;
 using QRWithSignalR.Data;
 using QRWithSignalR.Entity;
 using QRWithSignalR.Interface;
@@ -32,6 +35,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
+
+
+builder.Services.AddSingleton<IUserActivityChannel,UserActivityChannel>();
+builder.Services.AddHostedService<UserActivityBackgroundService>();
 
 
 
@@ -166,7 +173,7 @@ app.UseAuthorization();
 
 //Middleware to log request and response(Global Error Handling can be done here)
 
-app.UseMiddleware<QRWithSignalR.Middleware.GlobalErrorHandlingMiddleware>();
+//app.UseMiddleware<QRWithSignalR.Middleware.GlobalErrorHandlingMiddleware>();
 
 
 app.UseStaticFiles();
