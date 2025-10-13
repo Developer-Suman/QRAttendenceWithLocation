@@ -24,7 +24,7 @@ namespace QRWithSignalR.BackGroundServices
             await foreach (var activity in _channel.ReadAllAsync(stoppingToken))
             {
                 _logger.LogInformation("Admin Activity: {Action} by {UserId} at {Time}",
-                    activity.action, activity.userId, activity.timeStamp);
+                    activity.Action, activity.UserId, activity.TimeStamp);
             }
 
         }

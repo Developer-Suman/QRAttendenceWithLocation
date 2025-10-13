@@ -21,7 +21,7 @@ namespace QRWithSignalR.BackGroundServices
             await foreach (var activity in _channel.ReadAllAsync(stoppingToken))
             {
                 _logger.LogInformation("ADMIN ACTIVITY => UserId: {UserId}, Action: {Action}, Time: {Time}",
-                    activity.userId, activity.action, activity.timeStamp);
+                    activity.UserId, activity.Action, activity.TimeStamp);
 
                 // TODO: You can save to DB or broadcast via SignalR here
             }

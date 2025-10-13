@@ -43,9 +43,20 @@ namespace QRWithSignalR.Controllers.v1
 
                 var activity = new UserActivityLogs
                 (
-                    userId: "123",
-                    action: $"Purchase added with role {purchase.Role}",
-                    timeStamp: DateTime.UtcNow);
+                    UserId: "123",
+                    Action: $"Purchase added with role {purchase.Role}",
+                    TimeStamp: DateTime.UtcNow,
+                    Module: "PurchaseModule",
+                    SubModule: "AddPurchase",
+                    Description: $"Purchase of amount {purchase.Qty* purchase.Price} added.",
+                    IpAddress: HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    UserAgent: Request.Headers["User-Agent"].ToString()
+
+
+
+
+                    );
+
         
 
                 if (purchase.Role == "Admin")
