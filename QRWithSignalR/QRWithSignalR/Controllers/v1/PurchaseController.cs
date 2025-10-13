@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using QRWithSignalR.BackGroundServices.Interface;
+using QRWithSignalR.Entity;
 using QRWithSignalR.Interface;
 using QRWithSignalR.ServiceDTOs;
 using QRWithSignalR.Services;
@@ -17,11 +19,13 @@ namespace QRWithSignalR.Controllers.v1
     {
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IPurchaseServices _purcahseServices;
+        private readonly IUserActivityChannel _activityChannel;
 
-        public PurchaseController(IHubContext<NotificationHub> hubContext, IPurchaseServices purchaseServices)
+        public PurchaseController(IHubContext<NotificationHub> hubContext, IPurchaseServices purchaseServices, IUserActivityChannel activityChannel)
         {
             _hubContext = hubContext;
             _purcahseServices = purchaseServices;
+            _activityChannel = activityChannel;
 
         }
 
@@ -31,6 +35,15 @@ namespace QRWithSignalR.Controllers.v1
             try
             {
                 await _purcahseServices.AddPurchaseAsync(purchase);
+
+                await _activityChannel.WriteAsync(new UserActivityLogs(
+                    "User123",
+                    "Created a new sales record",
+                    DateTime.UtcNow
+                ));
+
+                return Ok("Sales created successfully");
+
                 return Ok(new { success = true, message = "Purchase successful." });
 
             }
