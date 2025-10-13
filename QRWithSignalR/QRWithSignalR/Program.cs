@@ -37,8 +37,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 
 
-builder.Services.AddSingleton<IUserActivityChannel,UserActivityChannel>();
+builder.Services.AddSingleton<IActivityChannel,UserActivityChannel>();
 builder.Services.AddHostedService<UserActivityBackgroundService>();
+builder.Services.AddHostedService<AdminActivityBackgroundServices>();
+builder.Services.AddSingleton<AdminActivityChannel>();
+builder.Services.AddSingleton<UserActivityChannel>();
 
 
 
@@ -163,8 +166,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Enviro
 }
 
 
-app.UseSwagger();
-app.UseSwaggerUI();
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthorization();

@@ -3,10 +3,13 @@ using System.Threading.Channels;
 
 namespace QRWithSignalR.BackGroundServices.Interface
 {
-    public interface IUserActivityChannel
+    public interface IActivityChannel
     {
-        Channel<UserActivityLogs> Channel { get; }
         ValueTask WriteAsync(UserActivityLogs activity);
         ValueTask<UserActivityLogs> ReadAsync(CancellationToken cancellationToken);
+
+        //For Production
+        void AddActivity(UserActivityLogs activity);
+        IAsyncEnumerable<UserActivityLogs> ReadAllAsync(CancellationToken cancellationToken);
     }
 }
