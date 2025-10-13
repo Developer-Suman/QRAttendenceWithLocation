@@ -10,9 +10,18 @@ const Dashboard: React.FC = () => {
   const [notifications, setNotifications] = useState<string[]>([]);
   const [qrValue, setQrValue] = useState<string>("");
 
+  const [adminActivity, setAdminActivity] = useState<string[]>([]);
+
   useEffect(() => {
+    //Production
+    // const connection = new signalR.HubConnectionBuilder()
+    //   .withUrl("https://location.finnetra.com/notificationHub") // backend hub URL
+    //   .withAutomaticReconnect()
+    //   .build();
+
+    //Development
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl("https://location.finnetra.com/notificationHub") // backend hub URL
+      .withUrl("https://localhost:7113/notificationHub") // backend hub URL
       .withAutomaticReconnect()
       .build();
 
@@ -20,6 +29,12 @@ const Dashboard: React.FC = () => {
     connection.on("ReceivePurchaseNotification", (message: string) => {
       console.log("📢 New purchase notification:", message);
       setNotifications((prev) => [...prev, message]);
+    });
+
+    // Handle Admin Activities
+    connection.on("AdminActivity", (activitymsg: string) => {
+      console.log("📢 New Admin notification:", activitymsg);
+      setAdminActivity((actMsg) => [...actMsg, activitymsg]);
     });
 
     // Handle new QR code
@@ -47,6 +62,17 @@ const Dashboard: React.FC = () => {
         <ul>
           {notifications.map((msg, index) => (
             <li key={index}>{msg}</li>
+          ))}
+        </ul>
+      )}
+
+      <h2>📢 AdminActivity Notification</h2>
+      {adminActivity.length === 0 ? (
+        <p>No activity yet...</p>
+      ) : (
+        <ul>
+          {adminActivity.map((actmsg, index) => (
+            <li key={index}>{actmsg}</li>
           ))}
         </ul>
       )}

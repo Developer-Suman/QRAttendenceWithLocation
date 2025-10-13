@@ -12,3 +12,11 @@ wwwroot\qrcodes\d0c1ce8a-6447-401e-af5a-e6679fc167b6.png
 wwwroot\qrcodes\e0c2e540-6234-43df-a574-e17281117e15.png
 wwwroot\qrcodes\fc4293a1-22c0-453d-9d4d-214e8b97c3e1.png
 wwwroot\qrcodes\new.png
+wwwroot\qrcodes\f6431ba5-302a-4fdd-826b-4d23ea6b3f55.png
+wwwroot\qrcodes\197fe3cf-a603-4bab-b030-a03fbe54d686.png
+wwwroot\qrcodes\0fc7d6ab-4efe-499a-b39c-1f88d15e21aa.png
+wwwroot\qrcodes\4c97ed94-367d-42d2-965a-cc07e808a48e.png
+wwwroot\qrcodes\7e0da247-044b-44fd-a633-ffabedd252b2.png
+wwwroot\qrcodes\44a713e3-2cc9-4453-83d4-ffaf963df6fc.png
+wwwroot\qrcodes\1ae80dea-0796-4696-be97-1e94462b4f48.png
+wwwroot\qrcodes\5e9d3b83-08db-4664-a830-3103968d2b72.png
