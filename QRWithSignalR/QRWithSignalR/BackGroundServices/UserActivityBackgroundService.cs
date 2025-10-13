@@ -8,12 +8,12 @@ namespace QRWithSignalR.BackGroundServices
 {
     public class UserActivityBackgroundService : BackgroundService
     {
-        private readonly IUserActivityChannel _activityChannel;
+        private readonly UserActivityChannel _channel;
         private readonly ILogger<UserActivityBackgroundService> _logger;
 
-        public UserActivityBackgroundService(IUserActivityChannel channel, ILogger<UserActivityBackgroundService> logger)
+        public UserActivityBackgroundService(UserActivityChannel channel, ILogger<UserActivityBackgroundService> logger)
         {
-            _activityChannel = channel;
+            _channel = channel;
             _logger = logger;
         }
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -21,20 +21,12 @@ namespace QRWithSignalR.BackGroundServices
             _logger.LogInformation("User activity background service started.");
             await Task.Delay(1000, stoppingToken);
 
-            while (!stoppingToken.IsCancellationRequested)
+            await foreach (var activity in _channel.ReadAllAsync(stoppingToken))
             {
-
-                // Save to database, or publish via SignalR to admin dashboard
-                var activity = await _activityChannel.ReadAsync(stoppingToken);
-                _logger.LogInformation($"Processing activity: {activity.userId} - {activity.action}");
-                // Example: save to DB
-                // await _dbContext.UserActivityLogs.AddAsync(log);
-                // await _dbContext.SaveChangesAsync();
-
-
-
+                _logger.LogInformation("Admin Activity: {Action} by {UserId} at {Time}",
+                    activity.action, activity.userId, activity.timeStamp);
             }
-       
+
         }
     }
 }

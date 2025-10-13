@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using QRWithSignalR.BackGroundServices.Interface;
+using QRWithSignalR.BackGroundServices.Services;
 using QRWithSignalR.Entity;
 using QRWithSignalR.Interface;
 using QRWithSignalR.ServiceDTOs;
 using QRWithSignalR.Services;
 using QRWithSignalR.SignalRHub;
+using System.Diagnostics;
 
 namespace QRWithSignalR.Controllers.v1
 {
@@ -19,13 +21,16 @@ namespace QRWithSignalR.Controllers.v1
     {
         private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IPurchaseServices _purcahseServices;
-        private readonly IUserActivityChannel _activityChannel;
+        private readonly AdminActivityChannel _adminActicity;
+        private readonly UserActivityChannel _userActicity;
 
-        public PurchaseController(IHubContext<NotificationHub> hubContext, IPurchaseServices purchaseServices, IUserActivityChannel activityChannel)
+        public PurchaseController(IHubContext<NotificationHub> hubContext, IPurchaseServices purchaseServices, AdminActivityChannel adminActivityChannel, UserActivityChannel userActivityChannel)
         {
             _hubContext = hubContext;
             _purcahseServices = purchaseServices;
-            _activityChannel = activityChannel;
+            _adminActicity = adminActivityChannel;
+            _userActicity = userActivityChannel;
+
 
         }
 
@@ -36,13 +41,19 @@ namespace QRWithSignalR.Controllers.v1
             {
                 await _purcahseServices.AddPurchaseAsync(purchase);
 
-                await _activityChannel.WriteAsync(new UserActivityLogs(
-                    "User123",
-                    "Created a new sales record",
-                    DateTime.UtcNow
-                ));
+                var activity = new UserActivityLogs
+                (
+                    userId: "123",
+                    action: $"Purchase added with role {purchase.Role}",
+                    timeStamp: DateTime.UtcNow);
+        
 
-                return Ok("Sales created successfully");
+                if (purchase.Role == "Admin")
+                    _adminActicity.AddActivity(activity);
+                else if (purchase.Role == "User")
+                    _userActicity.AddActivity(activity);
+                else
+                    return BadRequest("Unsupported role.");
 
                 return Ok(new { success = true, message = "Purchase successful." });
 

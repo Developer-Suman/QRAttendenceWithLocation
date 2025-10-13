@@ -1,36 +1,20 @@
 ﻿using QRWithSignalR.BackGroundServices.Interface;
 using QRWithSignalR.Entity;
 using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace QRWithSignalR.BackGroundServices.Services
 {
-    public class UserActivityChannel : IActivityChannel
+    public class AdminActivityChannel : IActivityChannel
     {
-
-        //private readonly Channel<UserActivityLogs> _channel = Channel.CreateUnbounded<UserActivityLogs>();
         public Channel<UserActivityLogs> Channel { get; }
 
-        public UserActivityChannel()
+        public AdminActivityChannel()
         {
             Channel = System.Threading.Channels.Channel.CreateUnbounded<UserActivityLogs>();
         }
-
-       
-
-        public async ValueTask<UserActivityLogs> ReadAsync(CancellationToken cancellationToken)
-        {
-            return await Channel.Reader.ReadAsync(cancellationToken);
-        }
-
-        public async ValueTask WriteAsync(UserActivityLogs activity)
-        {
-            await Channel.Writer.WriteAsync(activity);
-        }
-
         public void AddActivity(UserActivityLogs activity)
         {
-             Channel.Writer.WriteAsync(activity);
+            Channel.Writer.TryWrite(activity);
         }
 
         public async IAsyncEnumerable<UserActivityLogs> ReadAllAsync(CancellationToken cancellationToken)
@@ -39,6 +23,16 @@ namespace QRWithSignalR.BackGroundServices.Services
             {
                 yield return item;
             }
+        }
+
+        public ValueTask<UserActivityLogs> ReadAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask WriteAsync(UserActivityLogs activity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
