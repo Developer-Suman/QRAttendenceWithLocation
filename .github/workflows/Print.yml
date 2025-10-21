@@ -38,12 +38,12 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
-          context: ./QRWithSignalR
-          file: ./QRWithSignalR/Dockerfile
+          context: ./qRWithSignalR
+          file: ./qRWithSignalR/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/QRWithSignalR:latest
-            ${{ secrets.DOCKER_USERNAME }}/QRWithSignalR:${{ github.run_number }}
+            ${{ secrets.DOCKER_USERNAME }}/qRWithSignalR:latest
+            ${{ secrets.DOCKER_USERNAME }}/qRWithSignalR:${{ github.run_number }}
 
 
       - name: Print a message
