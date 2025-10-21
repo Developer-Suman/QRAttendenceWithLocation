@@ -20,5 +20,11 @@ jobs:
       - name: Display Current Directory
         run: ls -la
 
+      - name: Publish .NET Project
+        working-directory: ./QRWithSignalR
+        run: |
+          dotnet restore
+          dotnet publish -c Release -o ./app
+
       - name: Print a message
         run: echo "✅ Hello Gogthea! Your GitHub Action ran successfully."
