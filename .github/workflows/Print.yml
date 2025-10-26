@@ -26,4 +26,12 @@ jobs:
           -o UserKnownHostsFile=/dev/null \
           -o PubkeyAuthentication=no \
           administrator@45.117.153.128 'echo "Connected successfully" && powershell -Command "Get-Date; hostname; whoami"'
+
+    - name: Create Folder on Desktop
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          -o PubkeyAuthentication=no \
+          administrator@45.117.153.128 'powershell -Command "New-Item -Path \"C:\Users\Administrator\Desktop\suman\" -ItemType Directory -Force; Write-Host \"Folder created successfully at Desktop\suman\""'
     
