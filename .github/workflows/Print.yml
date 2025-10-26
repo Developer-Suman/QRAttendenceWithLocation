@@ -2,17 +2,17 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]    # Adjust as needed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Start ssh-agent and add private key
-        uses: webfactory/ssh-agent@v0.8.1
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
@@ -22,7 +22,7 @@ jobs:
           ssh-keyscan -p 22 45.117.153.128 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Run commands on VPS
+      - name: Execute commands on VPS
         env:
           VPS_USER: administrator
           VPS_HOST: 45.117.153.128
