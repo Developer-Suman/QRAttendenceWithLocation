@@ -18,7 +18,17 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'  # Change to your .NET version (6.0.x, 7.0.x, 8.0.x)
-    
+
+
+    - name: Display Current Directory
+      run: ls -la
+
+    - name: Publish .NET Project
+      working-directory: ./QRWithSignalR
+      run: |
+        dotnet restore
+        dotnet publish -c Release -o ./app
+        
     # Restore dependencies
     - name: Restore dependencies
       run: dotnet restore
