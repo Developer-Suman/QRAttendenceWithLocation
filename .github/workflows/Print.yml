@@ -13,12 +13,39 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    # Using Password Authentication with sshpass
+    # Setup .NET SDK
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'  # Change to your .NET version (6.0.x, 7.0.x, 8.0.x)
+    
+    # Restore dependencies
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    # Build the project
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    
+    # Publish the project
+    - name: Publish
+      run: dotnet publish --configuration Release --output ./publish --no-build
+    
+    # Create zip file of published content
+    - name: Create deployment package
+      run: |
+        cd publish
+        zip -r ../deploy.zip .
+        cd ..
+        ls -lh deploy.zip
+    
+    # Install sshpass for password authentication
     - name: Install sshpass
       run: |
         sudo apt-get update
         sudo apt-get install -y sshpass
     
+    # Test SSH Connection
     - name: Test Connection
       run: |
         sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
@@ -26,7 +53,8 @@ jobs:
           -o UserKnownHostsFile=/dev/null \
           -o PubkeyAuthentication=no \
           administrator@45.117.153.128 'echo "Connected successfully" && powershell -Command "Get-Date; hostname; whoami"'
-
+    
+    # Create deployment folder on Desktop
     - name: Create Folder on Desktop
       run: |
         sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
@@ -35,3 +63,24 @@ jobs:
           -o PubkeyAuthentication=no \
           administrator@45.117.153.128 'powershell -Command "New-Item -Path \"C:\Users\Administrator\Desktop\suman\" -ItemType Directory -Force; Write-Host \"Folder created successfully at Desktop\suman\""'
     
+    # Copy published files to Windows VPS
+    - name: Copy files to VPS
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" scp \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          deploy.zip administrator@45.117.153.128:C:/Users/Administrator/Desktop/
+    
+    # Extract and deploy files
+    - name: Extract and Deploy
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          -o PubkeyAuthentication=no \
+          administrator@45.117.153.128 << 'ENDSSH'
+          echo "Extracting deployment package..."
+          powershell -Command "Expand-Archive -Path 'C:\Users\Administrator\Desktop\deploy.zip' -DestinationPath 'C:\Users\Administrator\Desktop\suman' -Force"
+          powershell -Command "Remove-Item 'C:\Users\Administrator\Desktop\deploy.zip' -Force"
+          echo "Deployment completed successfully!"
+          powershell -Command "Get-ChildItem 'C:\Users\Administrator\Desktop\suman' | Select-Object Name, Length, LastWriteTime"
