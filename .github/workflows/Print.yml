@@ -17,29 +17,18 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x'  # Change to your .NET version (6.0.x, 7.0.x, 8.0.x)
-
-
+        dotnet-version: '8.0.x'
+    
     - name: Display Current Directory
       run: ls -la
-
+    
+    # Publish .NET Project from QRWithSignalR directory
     - name: Publish .NET Project
       working-directory: ./QRWithSignalR
       run: |
         dotnet restore
-        dotnet publish -c Release -o ./app
-        
-    # Restore dependencies
-    - name: Restore dependencies
-      run: dotnet restore
-    
-    # Build the project
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    
-    # Publish the project
-    - name: Publish
-      run: dotnet publish --configuration Release --output ./publish --no-build
+        dotnet build -c Release
+        dotnet publish -c Release -o ../publish
     
     # Create zip file of published content
     - name: Create deployment package
