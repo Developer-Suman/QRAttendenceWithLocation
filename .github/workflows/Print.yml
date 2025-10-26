@@ -1,37 +1,58 @@
-
-name: Deploy to VPS
+name: Deploy React App to Windows VPS
 
 on:
   push:
-    branches: [ main ]    # Adjust as needed
+    branches:
+      - main  # Change to your deployment branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add VPS to known_hosts
+      - name: Set up SSH key and connect to VPS
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          VPS_USER: administrator
+          VPS_HOST: 45.117.153.128
+          VPS_PORT: 22
         run: |
+          # Prepare SSH folder
           mkdir -p ~/.ssh
-          ssh-keyscan -p 22 45.117.153.128 >> ~/.ssh/known_hosts
+
+          # Save private key
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # Add VPS host to known_hosts to avoid authenticity prompt
+          ssh-keyscan -p $VPS_PORT $VPS_HOST >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Execute commands on VPS
+          # Test connection
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -p $VPS_PORT $VPS_USER@$VPS_HOST 'whoami; uptime'
+
+      - name: Copy React build to VPS
         env:
           VPS_USER: administrator
           VPS_HOST: 45.117.153.128
           VPS_PORT: 22
         run: |
-          ssh -p $VPS_PORT -o UserKnownHostsFile=~/.ssh/known_hosts \
-            $VPS_USER@$VPS_HOST <<'EOF'
-          echo "Connected successfully!"
-          whoami
-          uptime
+          # Replace /path/on/vps with actual target folder on your VPS
+          scp -r ./dist/* $VPS_USER@$VPS_HOST:/path/on/vps/
+
+      - name: Restart or run your app on VPS
+        env:
+          VPS_USER: administrator
+          VPS_HOST: 45.117.153.128
+          VPS_PORT: 22
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no -p $VPS_PORT $VPS_USER@$VPS_HOST << 'EOF'
+          # Commands to restart your app. Example for Node.js:
+          # pkill -f "node your-app.js"
+          # cd /path/on/vps
+          # nohup node your-app.js &
+          echo "Deployment complete!"
           EOF
