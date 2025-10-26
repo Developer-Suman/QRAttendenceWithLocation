@@ -12,25 +12,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    
-    - name: Setup SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H 45.117.153.128 >> ~/.ssh/known_hosts
-    
-    - name: Connect to Windows VPS via SSH
-      run: |
-        ssh -o StrictHostKeyChecking=no administrator@45.117.153.128 << 'EOF'
-          echo "Connected to Windows VPS"
-          whoami
-          hostname
-          # Add your commands here
-          # Example: PowerShell commands
-          powershell -Command "Get-Date"
-          powershell -Command "Get-ComputerInfo | Select-Object WindowsVersion, OsArchitecture"
-        EOF
+  
     
     # Alternative: Using password authentication (less secure)
     - name: Connect using sshpass (password auth)
