@@ -1,51 +1,36 @@
-name: Simple Print Test
+name: Deploy to VPS
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  print_job:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Setup .NET 8 SDK
-        uses: actions/setup-dotnet@v4
+      - name: Start ssh-agent and add private key
+        uses: webfactory/ssh-agent@v0.8.1
         with:
-          dotnet-version: 8.x
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Display Current Directory
-        run: ls -la
-
-      - name: Publish .NET Project
-        working-directory: ./QRWithSignalR
+      - name: Add VPS to known_hosts
         run: |
-          dotnet restore
-          dotnet publish -c Release -o ./app
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 45.117.153.128 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./QRWithSignalR
-          file: ./QRWithSignalR/Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/qrcodeforlocation:latest
-            ${{ secrets.DOCKER_USERNAME }}/qrcodeforlocation:${{ github.run_number }}
-
-
-      - name: Print a message
-        run: echo "✅ Hello Gogthea! Your GitHub Action ran successfully."
-        
+      - name: Run commands on VPS
+        env:
+          VPS_USER: administrator
+          VPS_HOST: 45.117.153.128
+          VPS_PORT: 22
+        run: |
+          ssh -p $VPS_PORT -o UserKnownHostsFile=~/.ssh/known_hosts \
+            $VPS_USER@$VPS_HOST <<'EOF'
+          echo "Connected successfully!"
+          whoami
+          uptime
+          EOF
