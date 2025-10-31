@@ -12,6 +12,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<PurchaseNotify />} />
         <Route path="/location" element={<LocationMap />} />
+                <Route path="/location" element={<LocationMap />} />
       </Routes>
     </Router>
   );

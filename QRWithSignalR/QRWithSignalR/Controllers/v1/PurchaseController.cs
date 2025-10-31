@@ -24,6 +24,8 @@ namespace QRWithSignalR.Controllers.v1
         private readonly AdminActivityChannel _adminActicity;
         private readonly UserActivityChannel _userActicity;
 
+
+
         public PurchaseController(IHubContext<NotificationHub> hubContext, IPurchaseServices purchaseServices, AdminActivityChannel adminActivityChannel, UserActivityChannel userActivityChannel)
         {
             _hubContext = hubContext;
@@ -34,7 +36,14 @@ namespace QRWithSignalR.Controllers.v1
 
         }
 
-        [HttpPost("add")]
+        [HttpPost("AddUsingPL")]
+        public async Task<IActionResult> AddPurchaseUsingPL([FromBody] PurchaseDTOs purchase)
+        {
+            await _purcahseServices.AddPurchaseUsingProcedure(purchase);
+            return Ok("Purchase item added successfully.");
+        }
+
+            [HttpPost("add")]
         public async Task<IActionResult> AddPurchase([FromBody] PurchaseDTOs purchase)
         {
             try
