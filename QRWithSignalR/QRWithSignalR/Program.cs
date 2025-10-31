@@ -1,6 +1,8 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Asp.Versioning.Conventions;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -28,7 +30,7 @@ IConfiguration configuration = builder.Configuration;
 
 //For MsSql Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+options.UseOracle(configuration.GetConnectionString("DefaultConnection"))
 );
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -127,7 +129,48 @@ builder.Services.AddApiVersioning(options =>
 });
 
 
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IOAuthService, OAuthFactory>();
+builder.Services.AddScoped<TokenServices>();
+//builder.Services.AddScoped<FacebookAuthService>();
+
+
 builder.Services.AddTransient<GlobalErrorHandlingMiddleware>();
+
+
+// Add authentication services
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+    options.CallbackPath = "/signin-google";
+});
+
+builder.Services.AddAuthentication()
+    .AddFacebook(facebookOptions =>
+    {
+        facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+        facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+        facebookOptions.CallbackPath = "/signin-facebook"; // <-- THIS is your Redirect URI
+    });
+
+
+
+//var google = builder.Configuration.GetSection("Authentication:Google");
+//builder.Services.AddAuthentication()
+//    .AddGoogle(options =>
+//    {
+//        options.ClientId = google["ClientId"];
+//        options.ClientSecret = google["ClientSecret"];
+//        options.CallbackPath = "/signin-google"; // Default callback path
+//    });
 
 var app = builder.Build();
 app.UseSwaggerUI(options =>

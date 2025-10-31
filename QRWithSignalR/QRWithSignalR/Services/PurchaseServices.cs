@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Oracle.ManagedDataAccess.Client;
 using QRWithSignalR.Data;
 using QRWithSignalR.Entity;
 using QRWithSignalR.Interface;
@@ -11,6 +12,7 @@ using System.Net.Http;
 using System.Text.Json;
 using ZXing;
 using ZXing.Common;
+using static QRCoder.PayloadGenerator;
 
 namespace QRWithSignalR.Services
 {
@@ -20,12 +22,14 @@ namespace QRWithSignalR.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _outputFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "qrcodes");
         private readonly ApplicationDbContext _context;
+        private readonly string _connectionString;
 
-        public PurchaseServices(IHubContext<NotificationHub> hubContext, IHttpContextAccessor httpContextAccessor, ApplicationDbContext applicationDbContext)
+        public PurchaseServices(IHubContext<NotificationHub> hubContext, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ApplicationDbContext applicationDbContext)
         {
             _context = applicationDbContext;
             _hubContext = hubContext;
             _httpContextAccessor = httpContextAccessor;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         public async Task AddPurchaseAsync(PurchaseDTOs purchase)
@@ -64,6 +68,24 @@ namespace QRWithSignalR.Services
             await _hubContext.Clients.All.SendAsync("ReceiveNewQr", qrPath);
         }
 
+        public async Task AddPurchaseUsingProcedure(PurchaseDTOs purchase)
+        {
+            using var connection = new OracleConnection(_connectionString);
+            using var command = new OracleCommand("AddPurchaseItems", connection)
+            {
+                CommandType = System.Data.CommandType.StoredProcedure
+            };
+
+            // Add parameters
+            command.Parameters.Add("p_itemName", OracleDbType.Varchar2).Value = purchase.ItemName;
+            command.Parameters.Add("p_price", OracleDbType.Decimal).Value = purchase.Price;
+            command.Parameters.Add("p_quantity", OracleDbType.Int32).Value = purchase.Qty
+                ;
+            command.Parameters.Add("p_qrUrl", OracleDbType.Varchar2).Value = "Test URL";
+
+            await connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
+        }
 
         public async Task CreateNewQR(string purchase)
         {

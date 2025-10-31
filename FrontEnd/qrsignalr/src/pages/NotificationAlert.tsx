@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import * as signalR from "@microsoft/signalr";
+import GoogleLoginButton from "../pages/LogIn";
+import FacebookLoginButton from "../components/FacebookLogin";
+import FacebookLoginChecker from "../components/FacebookLoginChecker";
 
 const Dashboard: React.FC = () => {
-  interface LocationMap {
-    lat: number;
-    lng: number;
-  }
+  // interface LocationMap {
+  //   lat: number;
+  //   lng: number;
+  // }
 
   const [notifications, setNotifications] = useState<string[]>([]);
   const [qrValue, setQrValue] = useState<string>("");
@@ -76,6 +79,9 @@ const Dashboard: React.FC = () => {
           ))}
         </ul>
       )}
+      <GoogleLoginButton />
+      <FacebookLoginButton />
+      <FacebookLoginChecker />
       <h3>📷 Scan QR Code</h3>
       {qrValue ? (
         <img
